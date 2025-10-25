@@ -3,6 +3,10 @@
 [![GitHub license](https://img.shields.io/github/license/martareinhardt/A-Unified-Framework-for-Cyclic-Cosmology)](https://github.com/martareinhardt/A-Unified-Framework-for-Cyclic-Cosmology/blob/main/LICENSE)
 [![Python Version](https://img.shields.io/badge/python-3.9%2B-blue)](https://www.python.org/downloads/)
 [![Tests](https://img.shields.io/badge/tests-passing-brightgreen)](https://github.com/martareinhardt/A-Unified-Framework-for-Cyclic-Cosmology/actions)
+!git add simulacao_ciclica.png && !git commit -m "Adicionou plot da simulação cíclica" && !git push
+
+
+
 
 ![Cosmic Cycle Visualization](https://via.placeholder.com/800x400/000000/FFD700?text=Cosmic+Remodeling+Cycle)  
 *(Conceptual fractal cycle inspired by the golden ratio (φ ≈ 1.618), illustrating expansive widening post-quantum bounce. Generated via Matplotlib—see `/notebooks/fractal_viz.ipynb` for code.)*
