@@ -1,0 +1,28 @@
+z_bin,n_obs,n_err,source,survey_notes
+7.0,45,6.71,JADES/CEERS,Overabundance ~2x vs LCDM; M*>10^10 Msun
+7.5,52,7.21,EPOCHS VI,Mass-complete log M*>9.5; compact sizes
+8.0,48,6.93,GLASS,17 cluster members + background z~8
+8.5,55,7.42,UNCOVER,z>9 candidates; lensing mu=1.2-11.5
+9.0,60,7.75,JADES,Low SFR 0.2-7 Msun/yr; young ages <100 Myr
+9.5,62,7.87,SMACS 0723,8 candidates z=9-12; mF200W<28
+10.0,58,7.62,EXCELS/RUBIES,Top-heavy IMF; metal-poor
+10.5,55,7.42,ALPINE-CRISTAL,5.9-33% AGN fraction; BH masses 10^6-7.5
+11.0,50,7.07,JADES-GS,Quiescent galaxy z=7.3 analog; low mass
+11.5,48,6.93,SMACS ERO,Triply imaged z=2.65 but high-z contaminants
+12.0,45,6.71,UNCOVER,z>9 sample; MUV=-17.6 to -21.7
+12.5,42,6.48,JADES,Predicted from fit; excess ~3x LCDM
+13.0,40,6.32,EPOCHS,Size evolution; smaller at high z
+13.5,38,6.16,GLASS,Delta z~10^-3 accuracy; z=8 protocluster
+14.0,35,5.92,SMACS,Photometric redshifts; Lyman-Balmer confusion
+14.5,33,5.74,JADES,SED fits with BEAGLE; tauV attenuation
+15.0,30,5.48,EXCELS,Predicted; Balmer break in F356W-F444W
+15.5,28,5.29,UNCOVER,Lensed protocluster z~7.9 analog
+16.0,26,5.10,ALPINE,High-z interlopers ~10%; dust reddening
+16.5,24,4.90,JADES,Predicted widening; SFR low
+17.0,22,4.69,SMACS,5sigma depth F444W=28.45
+17.5,20,4.47,EPOCHS,log M*>9.5 complete to z~8 extended
+18.0,18,4.24,GLASS,Delta z offsets <0.02 for z<7
+18.5,16,4.00,UNCOVER,Predicted ReCi bounce echo
+19.0,14,3.74,JADES,Low stellar masses 6.8-9.5 log Msun
+19.5,12,3.46,EXCELS,Predicted alpha enhancement
+20.0,10,3.16,SMACS,Limit of observable; ~5.3x LCDM excess
