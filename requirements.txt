@@ -1,0 +1,8 @@
+numpy
+scipy
+astropy
+sympy
+matplotlib
+qutip
+emcee
+jupyter  # Pra notebooks
