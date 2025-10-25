@@ -1,69 +1,69 @@
-"""
-Friedmann Extension for Cyclic Cosmology Model
-Implements the unifying equation with dynamic coupling (alpha), widening factor (beta),
-and emergent gravity term (gamma). Solves ODEs for a(t), rho_m(t), phi(t) in FLRW metric.
-
-Author: Marta Reinhardt
-Date: October 2025
-"""
-
 import numpy as np
 from scipy.integrate import solve_ivp
-from scipy.constants import G, c
-import astropy.units as u
-from astropy.cosmology import Planck18
+import matplotlib.pyplot as plt
 
-class CyclicCosmology:
-    def __init__(self, alpha=0.2, beta=0.1, gamma=0.05, Omega_m=0.3, H0=67.4):
-        """
-        Initialize the model parameters.
-        - alpha: Dynamic coupling between DE (phi) and matter (rho_m).
-        - beta: Widening factor for expansive growth.
-        - gamma: Emergent gravity quantum term.
-        - Omega_m: Matter density parameter.
-        - H0: Hubble constant in km/s/Mpc.
-        """
-        self.alpha = alpha
-        self.beta = beta
-        self.gamma = gamma
-        self.Omega_m = Omega_m
-        self.H0 = H0 * u.km / u.s / u.Mpc.to(u.s**-1)  # Convert to s^-1
-        self.rho_crit = 3 * (self.H0**2) / (8 * np.pi * G)  # Critical density
+# Constants (em units cosmológicas, H0 em 1/Gyr pra simplicidade)
+H0 = 70  # km/s/Mpc, mas convertemos pra 1/Gyr ~ 0.23 /Gyr (aprox)
+H0_gyr = 0.23  # Hubble em 1/Gyr
+Omega_m = 0.315
+Omega_L = 0.685
+Omega_k = 1 - Omega_m - Omega_L
+Gyr_to_s = 3.156e16  # Mas usamos t em Gyr
 
-    def friedmann_eq(self, t, y):
-        """
-        System of ODEs based on extended Friedmann equation.
-        y = [a, rho_m, phi]  # Scale factor, matter density, scalar field
-        Returns dy/dt.
-        """
-        a, rho_m, phi = y
-        H = np.sqrt((8 * np.pi * G / 3) * rho_m + (self.alpha * phi * rho_m) +
-                    self.beta * (np.dot(a, a) / a) + self.gamma)  # Simplified emergent gravity
-        da_dt = H * a
-        drho_m_dt = -3 * H * rho_m * (1 + self.alpha * phi)  # Coupled dilution
-        dphi_dt = np.sqrt(2 * np.pi * G * rho_m)  # Simple scalar field evolution
-        return [da_dt, drho_m_dt, dphi_dt]
+# Equação de Friedmann estendida pra cosmologia cíclica
+def friedmann_extended(t, y, Omega_m, Omega_L, Omega_k, H0_gyr):
+    a, da_dt = y  # Estado: [a, \dot{a}]
+    
+    # H atual
+    H = H0_gyr * np.sqrt(Omega_m / a**3 + Omega_L + Omega_k / a**2)
+    
+    # Derivada: \dot{a} = H a
+    dadt = H * a
+    
+    # Aceleração: \ddot{a} = - (4πG/3) (ρ + 3p) a + cyclic_term
+    # Simplificado: pra flat matter+DE, \ddot{a}/a = - (H0^2 /2) (Ω_m / a^3) + cyclic
+    accel = -0.5 * H0_gyr**2 * (Omega_m / a**3) * a
+    cyclic_term = 0.05 * np.sin(2 * np.pi * t / 13.8) * a  # Oscilação fraca em escala de Hubble
+    da_dt_dt = accel + cyclic_term
+    
+    return [dadt, da_dt_dt]
 
-    def solve(self, t_span=(0, 13.8), y0=[1e-3, self.Omega_m * self.rho_crit, 1.0], method='RK45'):
-        """
-        Solve the system from Big Bang (t=0) to present (13.8 Gyr).
-        Returns sol object from solve_ivp.
-        """
-        t_eval = np.linspace(t_span[0], t_span[1], 1000) * 3.156e7 * 1e9  # Seconds
-        sol = solve_ivp(self.friedmann_eq, t_span * 3.156e7 * 1e9, y0, t_eval=t_eval, method=method)
-        return sol
+# Condições iniciais (evita overflow: early universe a~0.01)
+a0 = 0.01
+da_dt0 = H0_gyr * a0  # Consistente com H inicial
 
-    def hubble_param(self, z):
-        """
-        Compute H(z) for given redshift, comparing to Planck18.
-        """
-        a = 1 / (1 + z)
-        # Approximate from solution or analytical
-        return self.H0 * np.sqrt(self.Omega_m / a**3 + (1 - self.Omega_m) * np.exp(3 * self.alpha * z))
+# Tempo em Gyr
+t_span = (0, 14)  # 14 Gyr
+t_eval = np.linspace(0, 14, 1000)
 
-# Example usage
-if __name__ == "__main__":
-    model = CyclicCosmology(alpha=0.215)  # From JWST fit
-    sol = model.solve()
-    print(f"Scale factor at present: {sol.y[0][-1]:.3f}")
-    print(f"H(z=7): {model.hubble_param(7):.2f} km/s/Mpc")
+# Resolve ODE
+sol = solve_ivp(friedmann_extended, t_span, [a0, da_dt0],
+                args=(Omega_m, Omega_L, Omega_k, H0_gyr),
+                t_eval=t_eval, method='RK45', rtol=1e-6)
+
+# Resultados
+a = sol.y[0]
+t = sol.t
+
+# Plot Scale Factor
+plt.figure(figsize=(10, 6))
+plt.plot(t, a, label='Fator de Escala (a)')
+plt.xlabel('Tempo (Gyr)')
+plt.ylabel('Fator de Escala')
+plt.title('Evolução em Cosmologia Cíclica Estendida')
+plt.legend()
+plt.grid(True)
+plt.show()
+
+# Hubble Parameter
+H = (np.gradient(a, t) / a)  # Numérico, ou use fórmula
+plt.figure(figsize=(10, 6))
+plt.plot(t, H / H0_gyr, label='H/H0')
+plt.xlabel('Tempo (Gyr)')
+plt.ylabel('H/H0')
+plt.title('Parâmetro de Hubble')
+plt.legend()
+plt.grid(True)
+plt.show()
+
+print(f"Sucesso! a(final) = {a[-1]:.3f}, esperado ~1.0 em t=13.8 Gyr.")
