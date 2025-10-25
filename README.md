@@ -7,6 +7,15 @@
 ![Cosmic Cycle Visualization](https://via.placeholder.com/800x400/000000/FFD700?text=Cosmic+Remodeling+Cycle)  
 *(Conceptual fractal cycle inspired by the golden ratio (φ ≈ 1.618), illustrating expansive widening post-quantum bounce. Generated via Matplotlib—see `/notebooks/fractal_viz.ipynb` for code.)*
 
+```mermaid
+graph TD
+  A[Colapso via Buracos Negros] --> B[Bounce Quântico: Dimensões Emergentes]
+  B --> C[Recriação ReCi]
+  C --> D[Alargamento Expansivo + Gravidade Emergente]
+  D --> E[Ciclo TEM Repete]
+  E --> A
+  style A fill:#f9f,stroke:#333
+
 ## Overview
 **A Unified Framework for Cyclic Cosmology** extends foundational cosmological models into a self-regulating, cyclic paradigm. Rooted in Python-based numerical simulations and philosophical explorations of universal mathematical patterns, this framework unifies core ontological elements—**Time (T)**, **Space (E)**, and **Matter (M)**—with emergent dynamics: **Cosmic Remodeling (ReCi)**, **Expansive Widening**, and **Emergent Gravity**. 
 
