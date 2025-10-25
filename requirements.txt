@@ -1,4 +1,4 @@
-6numpy>=1.21.0
+numpy>=1.21.0
 scipy>=1.7.0
 matplotlib>=3.5.0
-# Opcional pra cosmologia real: astropy>=5.0 (adicione se quiser units automáticas)
+astropy>=5.0
