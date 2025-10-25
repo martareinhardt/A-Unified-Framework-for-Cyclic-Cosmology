@@ -3,12 +3,12 @@ import matplotlib.pyplot as plt
 
 class CyclicCosmology:
     def __init__(self):
-        self.hubble_param = 70 / 3.08568e19 * 3.15576e16  # H0 real em 1/Gyr ~0.023 (aprox, pra escala)
+        self.hubble_param = 70 / 3.08568e19 * 3.15576e16  # H0 real em 1/Gyr ~0.023 (aprox)
         self.time = 0.0
         self.bounce_happened = False  # Flag pra bounce só uma vez
         self.a_min = 0.001  # Ponto de bounce (a_min correspondente a ρ_crit)
-        self.omega_m = 0.3  # Corrigido! Omega_m do Planck
-        self.omega_l = 0.7  # DE
+        self.omega_m = 0.341  # Do fit JWST! (ajustado pro excesso early galaxies)
+        self.omega_l = 1 - self.omega_m  # DE
     
     def set_hubble_parameter(self, h):
         self.hubble_param = h
@@ -26,7 +26,6 @@ class CyclicCosmology:
             H = abs(H)  # Flip pra positivo (rebound)
             self.bounce_happened = True  # Só uma vez por ciclo
         
-        # Durante expansão normal, H positivo; em "contração" inicial, H pode ser ajustado
         self.time += dt
         new_a = a_prev * np.exp(H * dt + cyclic_osc)
         return max(new_a, 1e-10)  # Evita zero/NaN
@@ -71,4 +70,5 @@ def run_simulations():
     print(f"Passo do bounce: {bounce_step} (~{bounce_step * dt:.1f} Gyr)")
 
 # Rode!
-run_simulations()
+if __name__ == "__main__":
+    run_simulations()
