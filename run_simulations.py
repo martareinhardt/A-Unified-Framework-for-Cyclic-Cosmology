@@ -1,47 +1,33 @@
-#!/usr/bin/env python3
-"""
-Run Simulations for Cyclic Cosmology
-CLI tool to simulate and plot the model with given parameters.
-
-Usage: python run_simulations.py --alpha 0.2 --z_max 10 --output results/
-"""
-
-import argparse
-import sys
-from src.friedmann_extended import CyclicCosmology
-from src.bounce_quantum import QuantumBounce
+import numpy as np
 import matplotlib.pyplot as plt
+import sys
+sys.path.append('.')  # Pra importar local
+from cyclic_cosmology import CyclicCosmology  # Agora existe!
 
-def main(alpha, z_max, output_dir):
-    # Cosmological simulation
-    model = CyclicCosmology(alpha=alpha)
-    sol = model.solve(t_span=(0, z_max / model.H0.value))  # Approximate t from z
-    t = sol.t / (3.156e7 * 1e9)  # Gyr
-    a = sol.y[0]
-    
-    # Plot H(z) approximation
-    z = 1 / a - 1
-    H_z = model.hubble_param(z)
+def run_simulations():
+    cosmology = CyclicCosmology()
+    num_steps = 1000
+    initial_scale_factor = 0.5  # Começa em contração
+    hubble_parameter = 0.7
+    dt = 0.014  # Passo ~0.014 Gyr
+
+    scale_factors = np.zeros(num_steps)
+    scale_factors[0] = initial_scale_factor
+    cosmology.set_hubble_parameter(hubble_parameter)
+    cosmology.time = 0  # Init time
+
+    for i in range(1, num_steps):
+        scale_factors[i] = cosmology.evolve_scale_factor(scale_factors[i-1], dt)
+
     plt.figure(figsize=(10, 6))
-    plt.plot(z, H_z.value, label=f'α={alpha}')
-    plt.xlabel('Redshift z')
-    plt.ylabel('H(z) [km/s/Mpc]')
-    plt.title('Hubble Parameter in Cyclic Model')
-    plt.legend()
-    plt.savefig(f'{output_dir}/hubble_simulation.png')
-    plt.close()
-    
-    # Quantum bounce
-    qb = QuantumBounce(coupling=alpha)
-    times, fluct = qb.simulate_bounce()
-    qb.plot_bounce(times, fluct)
-    
-    print(f"Simulation complete. Alpha optimized: {alpha}. Check {output_dir}/")
+    plt.plot(scale_factors)
+    plt.xlabel('Passo de Tempo')
+    plt.ylabel('Fator de Escala')
+    plt.title('Simulação de Cosmologia Cíclica Unificada')
+    plt.grid(True)
+    plt.show()
+
+    print(f"Simulação completa! a(final) = {scale_factors[-1]:.3f}")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Run Cyclic Cosmology Simulations')
-    parser.add_argument('--alpha', type=float, default=0.2, help='Dynamic coupling alpha')
-    parser.add_argument('--z_max', type=float, default=10, help='Max redshift for sim')
-    parser.add_argument('--output', type=str, default='results/', help='Output directory')
-    args = parser.parse_args()
-    main(args.alpha, args.z_max, args.output)
+    run_simulations()
