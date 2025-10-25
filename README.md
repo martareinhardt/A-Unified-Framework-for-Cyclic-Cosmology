@@ -41,6 +41,12 @@ Unifying Equation (Friedmann Extension):
 
 Where α (~0.2) is the dynamic coupling, β the widening factor, and γ the quantum emergent gravity. Tests show χ²/dof ≈1.12 on JWST data, closing 100% of tensions.
 Central Hypothesis: The universe is a "recycling organism" (ReCi), where remodelings (via black holes) generate quantum dimensions in the bounce, driving expansive widening. This resolves JWST's "early excess" as accelerated post-Big Bang recycling, without fine-tuning.
+graph TD
+  A[Colapso via Buracos Negros] --> B[Bounce: Dimensões Quânticas Emergentes]
+  B --> C[Recriação ReCi]
+  C --> D[Alargamento Expansivo + Gravidade Emergente]
+  D --> E[Ciclo TEM Repete]
+  E --> A
 
 Repository Structure
 /src/: Core code (ODE equations, MCMC fits with emcee).
