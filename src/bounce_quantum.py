@@ -1,57 +1,84 @@
-"""
-Quantum Bounce Simulation for Remodeling and Dimension Generation
-Simulates the post-collapse bounce using a simplified loop quantum gravity-inspired model,
-generating 'quantum dimensions' as emergent fluctuations.
-
-Author: Marta Reinhardt
-Date: October 2025
-"""
-
+# bounce_quantum.py
 import numpy as np
+from scipy.integrate import solve_ivp
 import matplotlib.pyplot as plt
-from qutip import Qobj, basis, sigmaz, mesolve, liouvillian
 
 class QuantumBounce:
-    def __init__(self, N_levels=4, coupling=0.1):
-        """
-        Initialize quantum bounce simulator.
-        - N_levels: Number of energy levels in the fuzzball model.
-        - coupling: Strength of quantum coupling (links to alpha in cosmology).
-        """
-        self.N = N_levels
-        self.coupling = coupling
-        self.H = self._hamiltonian()  # Hamiltonian for bounce dynamics
-
-    def _hamiltonian(self):
-        """Simple Hamiltonian for emergent gravity in bounce."""
-        H = sigmaz() * self.coupling  # Pauli Z for time evolution
-        return [H, [self.coupling, 'sigmaz']]  # Time-dependent term
-
-    def simulate_bounce(self, t_span=10, psi0=basis(2, 0)):
-        """
-        Simulate quantum state evolution during bounce.
-        Returns expectation values of 'dimension generation' (e.g., <sigma_z> as fluctuation proxy).
-        """
-        times = np.linspace(0, t_span, 500)
-        result = mesolve(self.H, psi0, times, [], [sigmaz()])
-        fluctuations = result.expect[0]  # Proxy for quantum dimensions emerging
-        return times, fluctuations
-
-    def plot_bounce(self, times, fluctuations):
-        """Plot the bounce dynamics."""
-        plt.figure(figsize=(8, 5))
-        plt.plot(times, fluctuations, label='Quantum Fluctuations (Dimension Proxy)')
-        plt.xlabel('Bounce Time (arbitrary units)')
-        plt.ylabel('<σ_z> (Emergent Dimensions)')
-        plt.title('Quantum Bounce: Generation of Dimensions Post-Remodeling')
+    def __init__(self, G=6.67430e-11, hbar=1.0545718e-34, rho_crit=8.62e-27):
+        self.G = G
+        self.hbar = hbar
+        self.rho_crit = rho_crit
+        self.scale_factor = 1.0
+        self.hubble_param = 2.3e-18  # H0 em s^-1 approx
+        
+    def friedmann_equation(self, rho):
+        """H² = (8πG/3) ρ"""
+        return np.sqrt(8 * np.pi * self.G * rho / 3)
+    
+    def quantum_pressure(self, rho):
+        return (self.hbar**2) / (2 * self.G * rho)  # Corrigido: / rho no denom
+    
+    def bounce_condition(self, rho_before, rho_after):
+        return rho_before > self.rho_crit and rho_after < rho_before  # Bounce se ρ max e decresce
+    
+    def solve_cosmological_evolution(self, rho_init, t_span, t_eval):
+        def equations(t, y):
+            a, H = y
+            rho = rho_init * (self.scale_factor / a)**3  # Diluição matéria
+            H_calc = self.friedmann_equation(rho)
+            
+            # Bounce: se ρ > ρ_crit, H = -H (contração → expansão)
+            if rho > self.rho_crit:
+                H = -abs(H_calc)  # Simples bounce
+            else:
+                H = H_calc
+            
+            # dH/dt ≈ - (3/2) H² (1 + w) pra w=0
+            dH_dt = -1.5 * H**2
+            da_dt = H * a  # Mas estado é [a, H], então dadt não é derivada direta
+            return [H * a, dH_dt]  # Estado [a, H]: da/dt = H a, dH/dt
+        
+        sol = solve_ivp(equations, t_span, [self.scale_factor, self.hubble_param], 
+                        t_eval=t_eval, method='RK45')
+        
+        return {'t': sol.t, 'a': sol.y[0], 'H': sol.y[1]}
+    
+    def plot_scale_factor(self, solution):
+        plt.figure(figsize=(10, 6))
+        plt.plot(solution['t'], solution['a'], label='Fator de Escala')
+        plt.xlabel('Tempo (s)')
+        plt.ylabel('Fator de Escala (a)')
+        plt.title('Evolução com Bounce Quântico')
         plt.legend()
         plt.grid(True)
-        plt.savefig('../results/bounce_simulation.png')
         plt.show()
+    
+    def analyze_quantum_effects(self, rho_values):
+        results = {}
+        for rho in rho_values:
+            pressure = self.quantum_pressure(rho)
+            quantum_param = pressure / (rho * self.G) if rho > 0 else 0  # Normalizado
+            regime = 'quantum' if quantum_param > 0.01 else 'classical'  # Threshold menor
+            results[rho] = {'quantum_pressure': pressure, 'quantum_parameter': quantum_param, 'regime': regime}
+        return results
 
-# Example usage
+# Exemplo
 if __name__ == "__main__":
-    qb = QuantumBounce(coupling=0.215)  # Tied to alpha
-    times, fluct = qb.simulate_bounce()
-    qb.plot_bounce(times, fluct)
-    print(f"Peak fluctuation (new dimensions): {np.max(fluct):.3f}")
+    qb = QuantumBounce()
+    rho_init = 1e-26  # Perto de ρ_crit
+    t_span = (0, 1e17)  # ~3 Gyr em s
+    t_eval = np.linspace(0, 1e17, 1000)
+    
+    solution = qb.solve_cosmological_evolution(rho_init, t_span, t_eval)
+    qb.plot_scale_factor(solution)
+    
+    rho_test = np.logspace(-28, -25, 5)
+    quantum_analysis = qb.analyze_quantum_effects(rho_test)
+    print("Análise Quântica:")
+    for rho, data in quantum_analysis.items():
+        print(f"Densidade: {rho:.2e}, Regime: {data['regime']}")
+    
+    rho_before = 1e-26
+    rho_after = 1e-27
+    bounce = qb.bounce_condition(rho_before, rho_after)
+    print(f"Bounce ativado: {bounce}")
