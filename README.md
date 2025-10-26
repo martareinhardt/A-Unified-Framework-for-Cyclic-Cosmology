@@ -1,6 +1,8 @@
 !# A Unified Framework for Cyclic Cosmology (Reinhardt-Steinhardt Model)
+
 git clone https://github.com/martareinhardt/A-Unified-Framework-for-Cyclic-Cosmology.git
 cd A-Unified-Framework-for-Cyclic-Cosmology
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
 ## Overview
