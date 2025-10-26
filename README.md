@@ -2,8 +2,6 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
-[![arXiv](https://img.shields.io/badge/arXiv-preprint-green.svg)](https://arxiv.org/abs/2501.XXXXX) <!-- Placeholder: Replace with real DOI upon submission -->
-
 ## Overview
 
 Welcome to **A Unified Framework for Cyclic Cosmology** (AUFC), a unified model that integrates quantum mechanics, general relativity, and recent cosmological observations (JWST, Planck, Euclid) into an eternal cycle without singularities. Inspired by the works of Steinhardt-Turok (cyclic cosmology) and extended with fractal elements (φ = (1 + √5)/2 ≈ 1.618, golden ratio), the framework resolves tensions such as H₀ (Hubble), S₈ (large-scale structure), and CMB anomalies (cold spots) via a **dynamic pentad**: **TEM** (initial Time-Space-Matter), **ReCi** (Cyclic Recreation), and **Widening** (Accelerated Expansion with Emergent Gravity).
@@ -134,7 +132,7 @@ plt.legend(); plt.show()  # Displays eternal bounce!
 - Steinhardt & Turok (2002): *Endless Universe*.
 - Planck Collaboration (2018): CMB Anomalies.
 - JWST (2024): Early Galaxies.
-- Reinhardt (2025): This framework (arXiv preprint).
+- Reinhardt (2025): This framework (Zenodo preprint).
 
 
 ---
