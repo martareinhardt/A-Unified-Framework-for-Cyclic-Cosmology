@@ -1,0 +1,11 @@
+# Data
+data/*.csv
+data/*.fits
+
+# Results
+results/*.png
+results/*.pdf
+
+# Jupyter
+notebooks/*.ipynb_checkpoints
+.ipynb_checkpoints/
