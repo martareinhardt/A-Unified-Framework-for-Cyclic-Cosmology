@@ -16,7 +16,7 @@ The model uses an **extended Friedmann equation** with cumulative terms per Gree
 
 The repo is modular:
 - **`/src/`**: Core code (equations, ODE solvers).
-- **`/notebooks/`**: Jupyter analyses (MCMC fits, fractal visualizations).
+- **`src/notebooks/`**: Jupyter analyses (MCMC fits, fractal visualizations).
 - **`/data/`**: Datasets (CMB maps, JWST spectra).
 - **`/docs/`**: Papers and references.
 - **`/tests/`**: Unit validations (χ² checks).
